@@ -29,6 +29,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/coffee-cafe/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await coffeeCollection.findOne(query);
+      res.send(result);
+    });
+
     app.post("/coffee-cafe", async (req, res) => {
       const coffee = req.body;
       const result = await coffeeCollection.insertOne(coffee);
@@ -39,6 +46,29 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await coffeeCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.patch("/coffee-cafe/:id", async (req, res) => {
+      const coffee = req.body;
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const updateCoffee = {
+        $set: {
+          productName: coffee.productName,
+          brandName: coffee.brandName,
+          productImage: coffee.productImage,
+          title: coffee.title,
+          reason: coffee.reason,
+          recommendationCount: coffee.recommendationCount,
+        },
+      };
+      const options = { upsert: true };
+      const result = await coffeeCollection.updateOne(
+        query,
+        updateCoffee,
+        options
+      );
       res.send(result);
     });
 
