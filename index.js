@@ -72,6 +72,28 @@ async function run() {
       res.send(result);
     });
 
+    // reecommendation count
+
+    app.patch("/recommend/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const coffee = await coffeeCollection.findOne(query);
+
+      if (!coffee) {
+        return res.status(404).send({ message: "Coffee not found" });
+      }
+
+      const updatedDoc = {
+        $set: {
+          recommendationCount: (coffee.recommendationCount || 0) + 1,
+        },
+      };
+
+      const result = await coffeeCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    });
+
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
