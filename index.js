@@ -23,7 +23,7 @@ async function run() {
   try {
     const coffeeCollection = client.db("coffeeCafeDB").collection("coffeeCafe");
 
-    app.post("/coffee", async (req, res) => {
+    app.post("/coffee-cafe", async (req, res) => {
       const coffee = req.body;
       const result = await coffeeCollection.insertOne(coffee);
       res.send(result);
@@ -38,7 +38,7 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
